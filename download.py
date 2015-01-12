@@ -24,8 +24,13 @@ class DMCAStorage(object):
             raise ValueError('Complaint #%d already exist; cannot override' % (k,))
         if not os.path.exists(directory):
             os.makedirs(directory)
-        with open(fullpath, "w") as f:
-            f.write(v)
+        try:
+            with open(fullpath, "w") as f:
+                f.write(v)
+        except KeyboardInterrupt:
+            with open(fullpath, "w") as f:
+                f.write(v)
+            raise
 
     def __contains__(self, k):
         k = int(k)
@@ -43,6 +48,7 @@ class DMCAStorage(object):
                     response = urllib2.urlopen('https://www.chillingeffects.org/notices/%d.json' % x).read()
                     skips_left = 10
                     self[x] = response
+                        
                 except urllib2.HTTPError:
                     print "Skipping ", x
                     skips_left -= 1

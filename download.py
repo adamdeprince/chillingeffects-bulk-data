@@ -54,7 +54,10 @@ class DMCAStorage(object):
                     skips_left -= 1
                     if not skips_left:
                         raise
+            else:
+                skips_left = 10
             x += 1
+            
 
 
 DMCAStorage().download()
